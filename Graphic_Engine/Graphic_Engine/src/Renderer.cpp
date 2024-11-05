@@ -1,4 +1,6 @@
 #include "Renderer.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
 #include <iostream>
 
 using std::cout;
@@ -18,4 +20,24 @@ bool glLogCall(const char* function, const char* file, int line)
     }
 
     return true;
+}
+
+void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+{
+    shader.use();
+    va.bind();
+    ib.bind();
+    GLCall(glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr));
+}
+
+void Renderer::clear() const
+{
+    GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f);)
+    GLCall(glClear(GL_COLOR_BUFFER_BIT));
+}
+
+void Renderer::swapBuffer(GLFWwindow* window) const
+{
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }

@@ -124,7 +124,7 @@ bool Shader::programInfoLog(unsigned int& shaderProgramP, const std::string ERRO
     else return true;
 }
 
-void Shader::use()
+void Shader::use() const
 {
     glUseProgram(ID);
 }

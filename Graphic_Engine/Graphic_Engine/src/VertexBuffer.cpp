@@ -1,4 +1,5 @@
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 #include "Renderer.h"
 
 IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int _count) : count(_count)
@@ -13,12 +14,12 @@ IndexBuffer::~IndexBuffer()
 	GLCall(glDeleteBuffers(1, &renderer_ID));
 }
 
-void IndexBuffer::bind()
+void IndexBuffer::bind() const
 {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer_ID));
 }
 
-void IndexBuffer::unbind()
+void IndexBuffer::unbind() const
 {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }

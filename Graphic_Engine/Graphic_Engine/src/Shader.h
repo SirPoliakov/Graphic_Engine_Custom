@@ -1,5 +1,4 @@
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -32,7 +31,7 @@ public:
     bool programInfoLog(unsigned int& shaderProgramP, const std::string ERROR_TYPE);
 
     // use/activate the shader
-    void use();
+    void use() const;
 
     // utility uniform functions
     void setBool(const std::string& name, bool value) const;
@@ -40,5 +39,3 @@ public:
     void setFloat(const std::string& name, float value) const;
     void setFloat2(const std::string& name, float value1, float value2) const;
 };
-
-#endif
