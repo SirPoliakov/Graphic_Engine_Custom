@@ -25,8 +25,6 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& vb
 	{
 		const auto& element = elements[i];
 		GLCall(glEnableVertexAttribArray(i));
-
-		//if ((unsigned int)5126 == GL_FLOAT) std::cout << "FLOAT" << std::endl;
 		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, vbLayout.getStride(), (const void*)offset));
 		offset += element.count * VertexBufferElement::getSizeOfType(element.type);
 	}

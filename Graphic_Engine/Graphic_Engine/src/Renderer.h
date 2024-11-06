@@ -2,6 +2,7 @@
 #include <intrin.h>
 #include "Shader.h"
 
+
 #define ASSERT(x) if(!(x)) __debugbreak();
 #define GLCall(x) glClearError();\
                   x;\
@@ -13,6 +14,7 @@ bool glLogCall(const char* function, const char* file, int line);
 
 class IndexBuffer;
 class VertexArray;
+class Texture;
 
 class Renderer
 {

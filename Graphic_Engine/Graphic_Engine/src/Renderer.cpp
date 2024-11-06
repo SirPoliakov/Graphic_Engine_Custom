@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
+#include "Texture.h"
 #include <iostream>
 
 using std::cout;
