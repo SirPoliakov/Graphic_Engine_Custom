@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+Graphic_Engine/Dependancies/glm
+Graphic_Engine/Graphic_Engine/Ressource/Textures/flodav2.jpg
+Graphic_Engine/Graphic_Engine/Graphic_Engine.vcxproj

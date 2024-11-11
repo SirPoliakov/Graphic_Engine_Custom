@@ -1,25 +1,24 @@
-#include "IndexBuffer.h"
-#include "VertexArray.h"
+#include "VertexBuffer.h"
 #include "Renderer.h"
 
-IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int _count) : count(_count)
+VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {
 	GLCall(glGenBuffers(1, &renderer_ID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer_ID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, renderer_ID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 }
 
-IndexBuffer::~IndexBuffer()
+VertexBuffer::~VertexBuffer()
 {
 	GLCall(glDeleteBuffers(1, &renderer_ID));
 }
 
-void IndexBuffer::bind() const
+void VertexBuffer::bind() const
 {
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer_ID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, renderer_ID));
 }
 
-void IndexBuffer::unbind() const
+void VertexBuffer::unbind() const
 {
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
