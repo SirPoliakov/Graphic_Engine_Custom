@@ -29,6 +29,7 @@
     <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="light.frag" />
     <None Include="Ressource\Shaders\Triangle.frag" />
     <None Include="Ressource\Shaders\Triangle.vert" />
   </ItemGroup>

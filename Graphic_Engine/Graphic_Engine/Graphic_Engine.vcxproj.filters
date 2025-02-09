@@ -1,27 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
-    <ClCompile Include="src\stb_image.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IndexBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_image.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexArray.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ressource\Shaders\Triangle.vert" />
-    <None Include="Ressource\Shaders\Triangle.frag" />
+    <None Include="Ressource\Shaders\Triangle.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\Triangle.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
-    <ClInclude Include="src\IndexBuffer.h" />
-    <ClInclude Include="src\VertexArray.h" />
-    <ClInclude Include="src\VertexBufferLayout.h" />
-    <ClInclude Include="src\stb_image.h" />
-    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\IndexBuffer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexArray.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexBuffer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexBufferLayout.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{cb5fc540-23b9-41a8-83a6-1d544de0e7c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{d77b35bd-9bcc-439e-83d4-fccf7330e38a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{be591d04-0e02-4790-9987-3b55bdc80f56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
