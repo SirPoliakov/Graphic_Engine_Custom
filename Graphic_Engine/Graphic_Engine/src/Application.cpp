@@ -72,47 +72,47 @@ int main()
     float vertices[] = {
 
             //vertices       
-       -0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f,  0.5f, -0.5f,
-        0.5f,  0.5f, -0.5f,
-       -0.5f,  0.5f, -0.5f,
-       -0.5f, -0.5f, -0.5f,
+       -0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
+        0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
+        0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
+       -0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
+       -0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
 
-       -0.5f, -0.5f,  0.5f,
-        0.5f, -0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,
-       -0.5f,  0.5f,  0.5f,
-       -0.5f, -0.5f,  0.5f,
+       -0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+        0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+        0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+       -0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+       -0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
 
-       -0.5f,  0.5f,  0.5f,
-       -0.5f,  0.5f, -0.5f,
-       -0.5f, -0.5f, -0.5f,
-       -0.5f, -0.5f, -0.5f,
-       -0.5f, -0.5f,  0.5f,
-       -0.5f,  0.5f,  0.5f,
+       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-        0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
 
-       -0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f,  0.5f,
-        0.5f, -0.5f,  0.5f,
-       -0.5f, -0.5f,  0.5f,
-       -0.5f, -0.5f, -0.5f,
-
-       -0.5f,  0.5f, -0.5f,
-        0.5f,  0.5f, -0.5f,
-        0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,
-       -0.5f,  0.5f,  0.5f,
-       -0.5f,  0.5f, -0.5f,
+       -0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
+       -0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
+       
+       -0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
+       -0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
+       -0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
     };
 
     //unsigned int indices[] = {
@@ -133,11 +133,12 @@ int main()
     // VAO, VBO, EBO...
 
     VertexArray cube_vao, light_vao;
-    VertexBuffer vb = VertexBuffer(vertices, 36 * 3 * sizeof(float));
+    VertexBuffer vb = VertexBuffer(vertices, 36 * 6 * sizeof(float));
     //IndexBuffer ib = IndexBuffer(indices, 6);
    
     VertexBufferLayout vLayout;
 
+    vLayout.push<float>(3);
     vLayout.push<float>(3);
 
     cube_vao.addBuffer(vb, vLayout);
@@ -185,6 +186,8 @@ int main()
         myRenderer.clear();
         objectCube.use();
         objectCube.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        objectCube.setVec3("lightPos", lightPos);
+        objectCube.setVec3("viewPos", cameraPos);
         objectCube.setVec3("lightColor", 1.0f, 1.0f,0.5f);
         
         glm::mat4 view;
@@ -199,19 +202,22 @@ int main()
         objectCube.setMat4("model", model);
         objectCube.setMat4("view", view);
         objectCube.setMat4("projection", projection);
+        
 
         myRenderer.draw(cube_vao, objectCube, 36);
 
         lightCube.use();
+        
         lightCube.setMat4("projection", projection);
         lightCube.setMat4("view", view);
+        lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+        lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         lightCube.setMat4("model", model);
 
         myRenderer.draw(light_vao, lightCube, 36);
-
 
         /* Swap buffer and poll for and process events */
         myRenderer.swapBuffer(window);
