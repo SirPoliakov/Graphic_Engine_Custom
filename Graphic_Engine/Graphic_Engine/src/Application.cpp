@@ -124,10 +124,11 @@ int main()
     // SHADERS
     const char* triangleVert = "Ressource\\Shaders\\Triangle.vert";
     const char* triangleFrag = "Ressource\\Shaders\\Triangle.frag";
+    const char* lightVert = "Ressource\\Shaders\\light.vert";
     const char* lightFrag = "Ressource\\Shaders\\light.frag";
 
     Shader objectCube = Shader(triangleVert, triangleFrag);
-    Shader lightCube = Shader(triangleVert, lightFrag);
+    Shader lightCube = Shader(lightVert, lightFrag);
     
 
     // VAO, VBO, EBO...
@@ -184,8 +185,29 @@ int main()
 
         /* Render here */
         myRenderer.clear();
+
         objectCube.use();
-        objectCube.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+
+        objectCube.setVec3("light.position", lightPos);
+        objectCube.setVec3("viewPos", cameraPos);
+
+        //light properties
+        glm::vec3 lightColor;
+        lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0));
+        lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7));
+        lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3));
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+        objectCube.setVec3("light.ambient", ambientColor);
+        objectCube.setVec3("light.diffuse", diffuseColor);
+        objectCube.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        // material properties
+        objectCube.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        objectCube.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        objectCube.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
+        objectCube.setFloat("material.shininess", 32.0f);
+
         objectCube.setVec3("lightPos", lightPos);
         objectCube.setVec3("viewPos", cameraPos);
         objectCube.setVec3("lightColor", 1.0f, 1.0f,0.5f);
@@ -193,12 +215,13 @@ int main()
         glm::mat4 view;
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-        glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        // make sure to initialize matrix to identity matrix first
         glm::mat4 projection = glm::mat4(1.0f);
 
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
+        
+        glm::mat4 model = glm::mat4(1.0f);
         objectCube.setMat4("model", model);
         objectCube.setMat4("view", view);
         objectCube.setMat4("projection", projection);
@@ -207,11 +230,8 @@ int main()
         myRenderer.draw(cube_vao, objectCube, 36);
 
         lightCube.use();
-        
         lightCube.setMat4("projection", projection);
         lightCube.setMat4("view", view);
-        lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
-        lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube

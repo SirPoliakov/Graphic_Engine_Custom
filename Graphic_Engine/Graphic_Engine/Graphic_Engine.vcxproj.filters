@@ -36,6 +36,9 @@
     <None Include="light.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="light.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IndexBuffer.h">
