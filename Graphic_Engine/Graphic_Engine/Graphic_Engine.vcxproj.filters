@@ -33,10 +33,10 @@
     <None Include="Ressource\Shaders\Triangle.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="light.frag">
+    <None Include="Ressource\Shaders\light.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="light.vert">
+    <None Include="Ressource\Shaders\light.frag">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

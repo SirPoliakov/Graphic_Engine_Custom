@@ -1,5 +1,4 @@
 #include "Texture.h"
-#include "Renderer.h"
 #include "stb_image.h"
 
 
@@ -14,52 +13,62 @@ Texture::Texture(const std::vector<Image>& imgs)
 
         if (count > 0) GLCall(glActiveTexture(GL_TEXTURE0 + count));
 
-        GLCall(glBindTexture(GL_TEXTURE_2D, temp_ID));
-        renderer_IDs.push_back(temp_ID);
-        if (image.format == ImageFormat::JPG)
-        {
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        }
-        else {
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-        }
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
         int width, height, nrChannels;
         //GLCall(stbi_set_flip_vertically_on_load(true));
         unsigned char* data = stbi_load(image.path, &width, &height, &nrChannels, 0);
 
         if (data)
         {
+            GLenum format;
+            if (nrChannels == 1)
+                format = GL_RED;
+            else if (nrChannels == 3)
+                format = GL_RGB;
+            else if (nrChannels == 4)
+                format = GL_RGBA;
+
+            GLCall(glBindTexture(GL_TEXTURE_2D, temp_ID));
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            GLCall(glGenerateMipmap(GL_TEXTURE_2D));
+
+            unsigned int texFormat;
+
             if (image.format == ImageFormat::JPG)
             {
-               GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+                texFormat = GL_CLAMP_TO_EDGE;
             }
-            else
-            { 
-                GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
-                
+            else {
+                if (image.glParam == REPEAT)
+                    texFormat = GL_REPEAT;
+                if (image.glParam == MIRRORED_REPEAT)
+                    texFormat = GL_MIRRORED_REPEAT;
+                if (image.glParam == CLAMP_TO_BORDER)
+                    texFormat = GL_CLAMP_TO_BORDER;
+                if (image.glParam == CLAMP_TO_EDGE)
+                    texFormat = GL_CLAMP_TO_EDGE;
             }
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texFormat));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texFormat));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
             
-            GLCall(glGenerateMipmap(GL_TEXTURE_2D));
+            renderer_IDs.push_back(temp_ID);
         }
         else
         {
             std::cout << "Failed to load texture" << std::endl;
         }
-        stbi_image_free(data);
+        stbi_image_free(data); 
         
         count++;
     }
 }
 
-void Texture::setUniforms(Shader& myShader)
+
+void Texture::setUniforms(Shader& myShader, std::string name)
 {
     unsigned int count = 1;
-    std::string tex = "texture";
+    std::string tex = name;
 
     myShader.use();
 
@@ -68,9 +77,10 @@ void Texture::setUniforms(Shader& myShader)
         std::string num = std::to_string(count);
         std::string final = tex + num;
         count++;
-        myShader.setInt(final, id-1);
+        myShader.setInt(final, id - 1);
     }
 }
+
 
 const void Texture::bind() const
 {

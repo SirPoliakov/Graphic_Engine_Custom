@@ -9,8 +9,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-const unsigned int SCR_WIDTH = 640;
-const unsigned int SCR_HEIGHT = 480;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -71,48 +71,48 @@ int main()
                
     float vertices[] = {
 
-            //vertices       
-       -0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-        0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-       -0.5f,  0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
-       -0.5f, -0.5f, -0.5f, 0.0f,  0.0f, -1.0f,
+            //positions          //normals            //texture coords
+           -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+           -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-       -0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-        0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-        0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-       -0.5f,  0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
-       -0.5f, -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+           -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+           -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+           -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-       -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+           -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+           -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+           -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+           -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+           -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+           -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-       -0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
-       -0.5f, -0.5f,  0.5f, 0.0f, -1.0f,  0.0f,
-       -0.5f, -0.5f, -0.5f, 0.0f, -1.0f,  0.0f,
-       
-       -0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
-       -0.5f,  0.5f,  0.5f, 0.0f,  1.0f,  0.0f,
-       -0.5f,  0.5f, -0.5f, 0.0f,  1.0f,  0.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+           -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+
+           -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+           -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+           -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
     //unsigned int indices[] = {
@@ -134,13 +134,14 @@ int main()
     // VAO, VBO, EBO...
 
     VertexArray cube_vao, light_vao;
-    VertexBuffer vb = VertexBuffer(vertices, 36 * 6 * sizeof(float));
+    VertexBuffer vb = VertexBuffer(vertices, 36 * 8 * sizeof(float));
     //IndexBuffer ib = IndexBuffer(indices, 6);
    
     VertexBufferLayout vLayout;
 
     vLayout.push<float>(3);
     vLayout.push<float>(3);
+    vLayout.push<float>(2);
 
     cube_vao.addBuffer(vb, vLayout);
     light_vao.addBuffer(vb, vLayout);
@@ -150,28 +151,22 @@ int main()
 
     // TEXTURES 
     
-    const char* path1 = "Ressource\\Textures\\flodav2.jpg";
-    //const char* path2 = "Ressource\\Textures\\awesomeface.png";
+    const char* path1 = "Ressource\\Textures\\container2.png";
+    const char* path2 = "Ressource\\Textures\\container2_specular.png";
+    const char* path3 = "Ressource\\Textures\\matrix.jpg";
 
-    Image img = Image(path1, ImageFormat::JPG);
-    //Image img2 = Image(path2, ImageFormat::PNG);
+    Image img = Image(path1, ImageFormat::PNG, GLParameter::REPEAT);
+    Image img2 = Image(path2, ImageFormat::PNG, GLParameter::REPEAT);
+    Image img3 = Image(path3, ImageFormat::JPG, GLParameter::CLAMP_TO_BORDER);
 
-    const std::vector<Image> images = { img };
+    const std::vector<Image> images = { img,img2, img3 };
 
     Texture tex = Texture(images);
 
-    //tex.setUniforms(rectangle);
-
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    /* Loop until the user closes the window */
-
-    /*glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);*/
-
+    objectCube.use();
+    objectCube.setInt("material.diffuse", 0);
+    objectCube.setInt("material.specular", 1);
+    objectCube.setInt("material.emission", 2);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -188,25 +183,17 @@ int main()
 
         objectCube.use();
 
+        //Position
         objectCube.setVec3("light.position", lightPos);
         objectCube.setVec3("viewPos", cameraPos);
 
         //light properties
-        glm::vec3 lightColor;
-        lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0));
-        lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7));
-        lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3));
-        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-        objectCube.setVec3("light.ambient", ambientColor);
-        objectCube.setVec3("light.diffuse", diffuseColor);
+        objectCube.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+        objectCube.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
         objectCube.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         // material properties
-        objectCube.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        objectCube.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        objectCube.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
-        objectCube.setFloat("material.shininess", 32.0f);
+        objectCube.setFloat("material.shininess", 16.0f);
 
         objectCube.setVec3("lightPos", lightPos);
         objectCube.setVec3("viewPos", cameraPos);
@@ -225,8 +212,8 @@ int main()
         objectCube.setMat4("model", model);
         objectCube.setMat4("view", view);
         objectCube.setMat4("projection", projection);
-        
 
+        tex.bind();
         myRenderer.draw(cube_vao, objectCube, 36);
 
         lightCube.use();
@@ -278,7 +265,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.1f;
+    float sensitivity = 0.2f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
