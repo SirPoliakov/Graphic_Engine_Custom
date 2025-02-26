@@ -7,27 +7,23 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "CameraManager.h"
 
 
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
+//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 // camera
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-
+CameraManager myCam(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
-float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-float pitch = 0.0f;
-float lastX = 800.0f / 2.0;
-float lastY = 600.0 / 2.0;
-float fov = 45.0f;
 
+void processInput(GLFWwindow* window);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
@@ -115,10 +111,19 @@ int main()
            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
-    //unsigned int indices[] = {
-    //    0, 1, 3
-    //    1, 2, 3
-    //};
+    // positions all containers
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
 
 
     // SHADERS
@@ -153,20 +158,19 @@ int main()
     
     const char* path1 = "Ressource\\Textures\\container2.png";
     const char* path2 = "Ressource\\Textures\\container2_specular.png";
-    const char* path3 = "Ressource\\Textures\\matrix.jpg";
+    //const char* path3 = "Ressource\\Textures\\matrix.jpg";
 
     Image img = Image(path1, ImageFormat::PNG, GLParameter::REPEAT);
     Image img2 = Image(path2, ImageFormat::PNG, GLParameter::REPEAT);
-    Image img3 = Image(path3, ImageFormat::JPG, GLParameter::CLAMP_TO_BORDER);
+    //Image img3 = Image(path3, ImageFormat::JPG, GLParameter::CLAMP_TO_BORDER);
 
-    const std::vector<Image> images = { img,img2, img3 };
+    const std::vector<Image> images = { img,img2};
 
     Texture tex = Texture(images);
 
     objectCube.use();
     objectCube.setInt("material.diffuse", 0);
     objectCube.setInt("material.specular", 1);
-    objectCube.setInt("material.emission", 2);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -177,54 +181,59 @@ int main()
 
         processInput(window);
 
-
         /* Render here */
         myRenderer.clear();
 
         objectCube.use();
 
         //Position
-        objectCube.setVec3("light.position", lightPos);
-        objectCube.setVec3("viewPos", cameraPos);
+        objectCube.setVec3("light.position", myCam.Position);
+        objectCube.setVec3("light.direction", myCam.Front);
+        objectCube.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+        objectCube.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+        objectCube.setVec3("viewPos", myCam.Position);
 
         //light properties
-        objectCube.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-        objectCube.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+        objectCube.setVec3("light.ambient", 0.01f, 0.01f, 0.01f);
+        objectCube.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
         objectCube.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        objectCube.setFloat("light.constant", 1.0f);
+        objectCube.setFloat("light.linear", 0.09f);
+        objectCube.setFloat("light.quadratic", 0.032f);
 
         // material properties
-        objectCube.setFloat("material.shininess", 16.0f);
-
-        objectCube.setVec3("lightPos", lightPos);
-        objectCube.setVec3("viewPos", cameraPos);
-        objectCube.setVec3("lightColor", 1.0f, 1.0f,0.5f);
+        objectCube.setFloat("material.shininess", 32.0f);
         
-        glm::mat4 view;
-        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
-        // make sure to initialize matrix to identity matrix first
+        glm::mat4 view = myCam.GetViewMatrix();
         glm::mat4 projection = glm::mat4(1.0f);
-
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        
         glm::mat4 model = glm::mat4(1.0f);
+
         objectCube.setMat4("model", model);
         objectCube.setMat4("view", view);
         objectCube.setMat4("projection", projection);
 
-        tex.bind();
-        myRenderer.draw(cube_vao, objectCube, 36);
 
-        lightCube.use();
-        lightCube.setMat4("projection", projection);
-        lightCube.setMat4("view", view);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        lightCube.setMat4("model", model);
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            // calculate the model matrix for each object and pass it to shader before drawing
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            objectCube.setMat4("model", model);
 
-        myRenderer.draw(light_vao, lightCube, 36);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        //lightCube.use();
+        //lightCube.setMat4("projection", projection);
+        //lightCube.setMat4("view", view);
+        //model = glm::mat4(1.0f);
+        //model = glm::translate(model, lightPos);
+        //model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        //lightCube.setMat4("model", model);
+
+        //myRenderer.draw(light_vao, lightCube, 36);
 
         /* Swap buffer and poll for and process events */
         myRenderer.swapBuffer(window);
@@ -242,17 +251,20 @@ void processInput(GLFWwindow* window)
 
     float cameraSpeed = static_cast<float>(2.5 * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        myCam.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        myCam.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        myCam.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        myCam.ProcessKeyboard(RIGHT, deltaTime);
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
     if (firstMouse)
     {
         lastX = xpos;
@@ -261,25 +273,10 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.2f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);
+    myCam.ProcessMouseMovement(xoffset, yoffset);
 }

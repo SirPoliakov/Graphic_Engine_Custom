@@ -65,6 +65,9 @@
     <ClInclude Include="src\VertexBufferLayout.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\CameraManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="headers">
