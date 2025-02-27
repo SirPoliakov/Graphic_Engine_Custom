@@ -125,6 +125,20 @@ int main()
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
+    // positions of the point lights
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3(0.7f,  0.2f,  2.0f),
+        glm::vec3(2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3(0.0f,  0.0f, -3.0f)
+    };
+
+    glm::vec3 pointLightColors[] = {
+    glm::vec3(1.0f, 0.6f, 0.0f),
+    glm::vec3(1.0f, 0.0f, 0.0f),
+    glm::vec3(1.0f, 1.0, 0.0),
+    glm::vec3(0.2f, 0.2f, 1.0f)
+    };
 
     // SHADERS
     const char* triangleVert = "Ressource\\Shaders\\Triangle.vert";
@@ -186,23 +200,58 @@ int main()
 
         objectCube.use();
 
-        //Position
-        objectCube.setVec3("light.position", myCam.Position);
-        objectCube.setVec3("light.direction", myCam.Front);
-        objectCube.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-        objectCube.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
         objectCube.setVec3("viewPos", myCam.Position);
-
-        //light properties
-        objectCube.setVec3("light.ambient", 0.01f, 0.01f, 0.01f);
-        objectCube.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
-        objectCube.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        objectCube.setFloat("light.constant", 1.0f);
-        objectCube.setFloat("light.linear", 0.09f);
-        objectCube.setFloat("light.quadratic", 0.032f);
-
-        // material properties
         objectCube.setFloat("material.shininess", 32.0f);
+
+        // directional light
+        objectCube.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        objectCube.setVec3("dirLight.ambient", 0.0f, 0.0f, 0.0f);
+        objectCube.setVec3("dirLight.diffuse", 0.05f, 0.05f, 0.05f);
+        objectCube.setVec3("dirLight.specular", 0.2f, 0.2f, 0.2f);
+        // point light 1
+        objectCube.setVec3("pointLights[0].position", pointLightPositions[0]);
+        objectCube.setVec3("pointLights[0].ambient", pointLightColors[0].x * 0.1, pointLightColors[0].y * 0.1, pointLightColors[0].z * 0.1);
+        objectCube.setVec3("pointLights[0].diffuse", pointLightColors[0].x, pointLightColors[0].y, pointLightColors[0].z);
+        objectCube.setVec3("pointLights[0].specular", pointLightColors[0].x, pointLightColors[0].y, pointLightColors[0].z);
+        objectCube.setFloat("pointLights[0].constant", 1.0f);
+        objectCube.setFloat("pointLights[0].linear", 0.14f);
+        objectCube.setFloat("pointLights[0].quadratic", 0.07f);
+        // point light 2
+        objectCube.setVec3("pointLights[1].position", pointLightPositions[1]);
+        objectCube.setVec3("pointLights[1].ambient", pointLightColors[1].x * 0.1, pointLightColors[1].y * 0.1, pointLightColors[1].z * 0.1);
+        objectCube.setVec3("pointLights[1].diffuse", pointLightColors[1].x, pointLightColors[1].y, pointLightColors[1].z);
+        objectCube.setVec3("pointLights[1].specular", pointLightColors[1].x, pointLightColors[1].y, pointLightColors[1].z);
+        objectCube.setFloat("pointLights[1].constant", 1.0f);
+        objectCube.setFloat("pointLights[1].linear", 0.14f);
+        objectCube.setFloat("pointLights[1].quadratic", 0.07f);
+        // point light 3
+        objectCube.setVec3("pointLights[2].position", pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
+        objectCube.setVec3("pointLights[2].ambient", pointLightColors[2].x * 0.1, pointLightColors[2].y * 0.1, pointLightColors[2].z * 0.1);
+        objectCube.setVec3("pointLights[2].diffuse", pointLightColors[2].x, pointLightColors[2].y, pointLightColors[2].z);
+        objectCube.setVec3("pointLights[2].specular", pointLightColors[2].x, pointLightColors[2].y, pointLightColors[2].z);
+        objectCube.setFloat("pointLights[2].constant", 1.0f);
+        objectCube.setFloat("pointLights[2].linear", 0.22f);
+        objectCube.setFloat("pointLights[2].quadratic", 0.20f);
+        // point light 4
+        objectCube.setVec3("pointLights[3].position", pointLightPositions[3]);
+        objectCube.setVec3("pointLights[3].ambient", pointLightColors[3].x * 0.1, pointLightColors[3].y * 0.1, pointLightColors[3].z * 0.1);
+        objectCube.setVec3("pointLights[3].diffuse", pointLightColors[3].x, pointLightColors[3].y, pointLightColors[3].z);
+        objectCube.setVec3("pointLights[3].specular", pointLightColors[3].x, pointLightColors[3].y, pointLightColors[3].z);
+        objectCube.setFloat("pointLights[3].constant", 1.0f);
+        objectCube.setFloat("pointLights[3].linear", 0.14f);
+        objectCube.setFloat("pointLights[3].quadratic", 0.07f);
+        // spotLight
+        objectCube.setVec3("spotLight.position", myCam.Position);
+        objectCube.setVec3("spotLight.direction",myCam.Front);
+        objectCube.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+        objectCube.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        objectCube.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        objectCube.setFloat("spotLight.constant", 1.0f);
+        objectCube.setFloat("spotLight.linear", 0.09f);
+        objectCube.setFloat("spotLight.quadratic", 0.032f);
+        objectCube.setFloat("spotLight.cutOff", glm::cos(glm::radians(10.0f)));
+        objectCube.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+        
         
         glm::mat4 view = myCam.GetViewMatrix();
         glm::mat4 projection = glm::mat4(1.0f);
@@ -225,15 +274,18 @@ int main()
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-        //lightCube.use();
-        //lightCube.setMat4("projection", projection);
-        //lightCube.setMat4("view", view);
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, lightPos);
-        //model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        //lightCube.setMat4("model", model);
+        lightCube.use();
+        lightCube.setMat4("projection", projection);
+        lightCube.setMat4("view", view);
+        for (unsigned int i = 0; i < 4; i++)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, pointLightPositions[i]);
+            model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+            lightCube.setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
-        //myRenderer.draw(light_vao, lightCube, 36);
 
         /* Swap buffer and poll for and process events */
         myRenderer.swapBuffer(window);
