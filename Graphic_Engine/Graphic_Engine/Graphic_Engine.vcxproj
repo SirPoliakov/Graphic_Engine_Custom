@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
@@ -31,12 +33,16 @@
   <ItemGroup>
     <None Include="Ressource\Shaders\light.frag" />
     <None Include="Ressource\Shaders\light.vert" />
+    <None Include="Ressource\Shaders\Model_Load.frag" />
+    <None Include="Ressource\Shaders\Model_Load.vert" />
     <None Include="Ressource\Shaders\Triangle.frag" />
     <None Include="Ressource\Shaders\Triangle.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CameraManager.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image.h" />
@@ -139,13 +145,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependancies\GLFW\include;$(SolutionDir)Dependancies\GLEW\include;$(SolutionDir)Dependancies\assimp\include;$(SolutionDir)Dependancies\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependancies\GLFW\include;$(SolutionDir)Dependancies\GLEW\include;$(SolutionDir)Dependancies\;$(SolutionDir)Dependancies\glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependancies\GLFW\lib-vc2022;$(SolutionDir)Dependancies\GLEW\lib\Release\x64;$(SolutionDir)Dependancies\assimp\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependancies\GLFW\lib-vc2022;$(SolutionDir)Dependancies\GLEW\lib\Release\x64;$(SolutionDir)Dependancies\assimp\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
