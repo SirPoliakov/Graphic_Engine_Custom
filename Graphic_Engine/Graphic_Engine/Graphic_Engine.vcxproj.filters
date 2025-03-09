@@ -25,10 +25,6 @@
     <ClCompile Include="src\VertexBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ressource\Shaders\Triangle.frag">
@@ -76,12 +72,6 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\CameraManager.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mesh.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Model.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
