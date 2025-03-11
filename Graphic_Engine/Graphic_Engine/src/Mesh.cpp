@@ -2,19 +2,44 @@
 #include "Shader.h"
 #include "VertexBufferLayout.h"
 
-Mesh::Mesh(vector<Vertex> _vertices, vector<unsigned int> _indices, vector<Texture> _textures) : 
-	VAO(VertexArray()),
-    vertices(_vertices), 
-	indices(_indices), 
-	textures(_textures),
-	EBO(IndexBuffer(&indices[0], indices.size())), 
-	VBO(VertexBuffer(&vertices[0], vertices.size()))
+
+Mesh::Mesh(vector<Vertex> _vertices, vector<unsigned int> _indices, vector<Texture> _textures)
 {
-	setupMesh();
+    this->vertices = _vertices;
+    this->indices = _indices;
+    this->textures = _textures;
+
+    setupMesh();
+    VAO.unbind();
 }
+
+Mesh& Mesh::operator=(Mesh&& other) noexcept
+{
+    if (this != &other) {
+        vertices = std::move(other.vertices);
+        indices = std::move(other.indices);
+        textures = std::move(other.textures);
+        VAO = std::move(other.VAO);
+        VBO = std::move(other.VBO);
+        EBO = std::move(other.EBO);
+    }
+    return *this;
+}
+
+Mesh::Mesh(Mesh&& other) noexcept
+    : vertices(std::move(other.vertices)),
+    indices(std::move(other.indices)),
+    textures(std::move(other.textures)),
+    VAO(std::move(other.VAO)),
+    VBO(std::move(other.VBO)),
+    EBO(std::move(other.EBO)) 
+    {
+        setupMesh();
+    }
 
 void Mesh::draw(const Shader& shader)
 {
+    
     // bind appropriate textures
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
@@ -40,8 +65,9 @@ void Mesh::draw(const Shader& shader)
         // and finally bind the texture
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
+
     VAO.bind();
-    GLCall(glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0));
+    GLCall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
     VAO.unbind();
 
     // always good practice to set everything back to defaults once configured.
@@ -49,18 +75,23 @@ void Mesh::draw(const Shader& shader)
 }
 
 void Mesh::setupMesh()
-{
-	VertexBufferLayout vLayout; vector<void*> offsets;
+{  
+    this->VAO.bind();
 
-	vLayout.push<float>(3); offsets.push_back((void*)0);
-	vLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Normal));
-	vLayout.push<float>(2); offsets.push_back((void*)offsetof(Vertex, TexCoords));
-	vLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Tangent));
-	vLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Bitangent));
-	vLayout.push<float>(4); offsets.push_back((void*)offsetof(Vertex, m_BoneIDs));
-	vLayout.push<float>(4); offsets.push_back((void*)offsetof(Vertex, m_Weights));
+    this->VBO.populateBuffer(&vertices[0], vertices.size());
 
-	unsigned int size = sizeof(Vertex);
+    this->EBO.populateIndex(&indices[0], indices.size());
 
-	VAO.addBuffer(VBO, vLayout, size, offsets);
+    VertexBufferLayout vbLayout; vector<void*> offsets;
+
+    vbLayout.push<float>(3); offsets.push_back((void*)0);
+    vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Normal));
+    vbLayout.push<float>(2); offsets.push_back((void*)offsetof(Vertex, TexCoords));
+    vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Tangent));
+    vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Bitangent));
+    vbLayout.push<unsigned int>(4); offsets.push_back((void*)offsetof(Vertex, m_BoneIDs));
+    vbLayout.push<float>(4); offsets.push_back((void*)offsetof(Vertex, m_Weights));
+    
+    unsigned int size = sizeof(Vertex);
+    VAO.addBuffer(VBO, vbLayout, size, offsets); 
 }

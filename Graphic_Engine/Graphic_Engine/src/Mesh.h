@@ -27,12 +27,18 @@ struct Vertex {
     int m_BoneIDs[MAX_BONE_INFLUENCE];
     //weights from each bone
     float m_Weights[MAX_BONE_INFLUENCE];
+
+    //Vertex(Vertex&&) = default;
+    //Vertex& operator=(Vertex&&) = default;
 };
 
 struct Texture {
     unsigned int id;
     string type;
     string path;
+
+    //Texture(Texture&&) = default;
+    //Texture& operator=(Texture&&) = default;
 };
 
 class Shader;
@@ -50,13 +56,22 @@ public:
 
     // constructor
     Mesh(vector<Vertex> _vertices, vector<unsigned int> _indices, vector<Texture> _textures);
+    
+
+    //Move Operation
+    Mesh(Mesh&& other) noexcept;
+    Mesh& operator=(Mesh&& other) noexcept;
+
+    //DeletedCopy
+    Mesh(const Mesh&) = delete;
+    Mesh& operator=(const Mesh&) = delete;
 
     void draw(const Shader& shader);
 
 private:
     // render data 
+    VertexBuffer VBO;
     IndexBuffer EBO;
-    VertexBuffer VBO; 
 
     void setupMesh();
 };

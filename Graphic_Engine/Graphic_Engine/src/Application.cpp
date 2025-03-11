@@ -17,6 +17,8 @@ const unsigned int SCR_HEIGHT = 1080;
 CameraManager myCam(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
+float rotateX = 0.0f;
+float rotateY = 0.0f;
 bool firstMouse = true;
 
 void processInput(GLFWwindow* window);
@@ -89,12 +91,18 @@ int main()
         glm::mat4 view = myCam.GetViewMatrix();
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        myShader.setMat4("projection", projection);
+        myShader.setMat4("view", view);
 
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        model = glm::rotate(model, glm::radians(rotateX), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rotateY), glm::vec3(0.0f, 1.0f, 0.0f));
+
         myShader.setMat4("model", model);
+
         myRenderer.draw(myShader, myModel);
 
         /* Swap buffer and poll for and process events */
@@ -120,6 +128,23 @@ void processInput(GLFWwindow* window)
         myCam.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         myCam.ProcessKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        rotateY -= 2.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        rotateY += 2.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        rotateX -= 2.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        rotateX += 2.0f;
+    }
+       
 }
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
