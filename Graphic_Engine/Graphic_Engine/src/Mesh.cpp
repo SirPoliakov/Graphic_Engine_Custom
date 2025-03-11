@@ -9,6 +9,7 @@ Mesh::Mesh(vector<Vertex>* _vertices, vector<unsigned int>* _indices, vector<Tex
     _vertices = 0; delete _vertices; 
     _indices = 0;  delete _indices; 
     _textures = 0;  delete _textures;
+    
     setupMesh();
     VAO.unbind();
 }
@@ -53,14 +54,8 @@ void Mesh::draw(const Shader& shader)
 
 void Mesh::setupMesh()
 {  
-    this->VAO.generate();
-    this->VBO.generate();
-    this->EBO.generate();
-
     this->VAO.bind();
-
-    this->VBO.populateBuffer(&vertices[0], vertices.size());
-
+    this->VBO.populateBuffer(&vertices[0], vertices.size() * sizeof(Vertex));
     this->EBO.populateIndex(&indices[0], indices.size());
 
     VertexBufferLayout vbLayout; vector<void*> offsets;

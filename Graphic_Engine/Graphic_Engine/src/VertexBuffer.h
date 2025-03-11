@@ -18,7 +18,6 @@ public:
 	~VertexBuffer();
 
 	void populateBuffer(const void* data, unsigned int size);
-	void generate();
 	void bind() const;
 	void unbind() const;
 };

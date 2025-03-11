@@ -20,7 +20,6 @@ public:
 
 	unsigned int getCount() const { return count; }
 	void populateIndex(const unsigned int* data, unsigned int _count);
-	void generate();
 	void bind() const;
 	void unbind() const;
 };

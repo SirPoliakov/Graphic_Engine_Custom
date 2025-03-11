@@ -7,8 +7,8 @@
 #include "CameraManager.h"
 
 
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 
 
 //void mouse_callback(GLFWwindow* window, double xpos, double ypos);

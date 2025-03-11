@@ -17,7 +17,6 @@ public:
 
 	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& vbLayout, unsigned int _size, std::vector<void*>& offsets);
 	unsigned int getID() { return renderer_ID; }
-	void generate();
 	void bind() const;
 	void unbind() const;
 };
