@@ -13,19 +13,14 @@ public:
 	IndexBuffer(const unsigned int* data, unsigned int _count);
 	IndexBuffer();
 
-	//Move Operations
-	IndexBuffer(IndexBuffer&& other) noexcept;
-	IndexBuffer& operator=(IndexBuffer&& other) noexcept;
-
-	//Deleted Copies
-	IndexBuffer(const IndexBuffer&) = delete;
-	IndexBuffer& operator=(const IndexBuffer&) = delete;
+	unsigned int getID() { return renderer_ID; }
 
 	//Destructor
 	~IndexBuffer();
 
 	unsigned int getCount() const { return count; }
 	void populateIndex(const unsigned int* data, unsigned int _count);
+	void generate();
 	void bind() const;
 	void unbind() const;
 };

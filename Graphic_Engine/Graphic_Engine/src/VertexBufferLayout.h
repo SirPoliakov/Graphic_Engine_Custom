@@ -25,9 +25,10 @@ class VertexBufferLayout
 {
 private:
 	std::vector<VertexBufferElement> elements = {};
-	unsigned int stride;
 
 public:
+	unsigned int stride;
+
 	VertexBufferLayout()
 		: stride(0) {}
 

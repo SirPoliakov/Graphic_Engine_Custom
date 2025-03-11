@@ -67,10 +67,10 @@ int main()
     GLCall(glEnable(GL_DEPTH_TEST));
    
     // SHADERS
-    Shader myShader("Ressource/Shaders/Model_Load.vert", "Ressource/Shaders/Model_Load.frag");
+    Shader myShader("C:/Users/jujuy/Documents/Prog/Git/Graphic_Engine_Custom/Graphic_Engine/Graphic_Engine/Ressource/Shaders/Model_Load.vert", "C:/Users/jujuy/Documents/Prog/Git/Graphic_Engine_Custom/Graphic_Engine/Graphic_Engine/Ressource/Shaders/Model_Load.frag");
     
     // TEXTURES 
-    string const& path = "Ressource/Meshes/Guitare_BackPack/backpack.obj";
+    string const& path = "C:/Users/jujuy/Documents/Prog/Git/Graphic_Engine_Custom/Graphic_Engine/Graphic_Engine/Ressource/Meshes/Guitare_BackPack/backpack.obj";
     Model myModel(path);
 
     // RENDERER 

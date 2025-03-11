@@ -12,18 +12,13 @@ public:
 	VertexBuffer(const void* data, unsigned int size);
 	VertexBuffer();
 
-	//Move Operations
-	VertexBuffer(VertexBuffer&& other) noexcept;
-	VertexBuffer& operator=(VertexBuffer&& other) noexcept;
-
-	//Deleted Copies
-	VertexBuffer(const VertexBuffer&) = delete;
-	VertexBuffer& operator=(const VertexBuffer&) = delete;
+	unsigned int getID() { return renderer_ID; }
 
 	//Destructor
 	~VertexBuffer();
 
 	void populateBuffer(const void* data, unsigned int size);
+	void generate();
 	void bind() const;
 	void unbind() const;
 };

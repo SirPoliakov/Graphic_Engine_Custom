@@ -7,10 +7,12 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include <string>
+#include <iostream>
+#include <memory>
 
 using namespace std;
 
-#define MAX_BONE_INFLUENCE 4
+//#define MAX_BONE_INFLUENCE 4
 
 struct Vertex {
     // position
@@ -20,16 +22,14 @@ struct Vertex {
     // texCoords
     glm::vec2 TexCoords;
     // tangent
-    glm::vec3 Tangent;
+    //glm::vec3 Tangent;
     // bitangent
-    glm::vec3 Bitangent;
+    //glm::vec3 Bitangent;
     //bone indexes which will influence this vertex
-    int m_BoneIDs[MAX_BONE_INFLUENCE];
+    //int m_BoneIDs[MAX_BONE_INFLUENCE];
     //weights from each bone
-    float m_Weights[MAX_BONE_INFLUENCE];
-
-    //Vertex(Vertex&&) = default;
-    //Vertex& operator=(Vertex&&) = default;
+    //float m_Weights[MAX_BONE_INFLUENCE];
+    //~Vertex(){ cout << "Vertex deleted!" << endl; }
 };
 
 struct Texture {
@@ -37,8 +37,7 @@ struct Texture {
     string type;
     string path;
 
-    //Texture(Texture&&) = default;
-    //Texture& operator=(Texture&&) = default;
+    ~Texture() { cout << "Texture : " << endl << "- id   " << id << endl << "- type  " << type << endl << "- path :  " << path << endl << "...deleted!" << endl; }
 };
 
 class Shader;
@@ -48,23 +47,16 @@ class Mesh {
 
 public:
     // mesh Data
-    vector<Vertex>       vertices;
-    vector<unsigned int> indices;
-    vector<Texture>      textures;
+    vector<Vertex>&       vertices;
+    vector<unsigned int>& indices;
+    vector<Texture>& textures;
 
     VertexArray VAO;
 
+    ~Mesh() { cout << "Mesh deleted!" << endl; }
+
     // constructor
-    Mesh(vector<Vertex> _vertices, vector<unsigned int> _indices, vector<Texture> _textures);
-    
-
-    //Move Operation
-    Mesh(Mesh&& other) noexcept;
-    Mesh& operator=(Mesh&& other) noexcept;
-
-    //DeletedCopy
-    Mesh(const Mesh&) = delete;
-    Mesh& operator=(const Mesh&) = delete;
+    Mesh(vector<Vertex>* _vertices, vector<unsigned int>* _indices, vector<Texture>* _textures);
 
     void draw(const Shader& shader);
 
