@@ -60,9 +60,9 @@ void Mesh::setupMesh()
 
     VertexBufferLayout vbLayout; vector<void*> offsets;
 
-    vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex,Position));
-    vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Normal));
-    vbLayout.push<float>(2); offsets.push_back((void*)offsetof(Vertex, TexCoords));
+    vbLayout.push(3); offsets.push_back((void*)offsetof(Vertex,Position));
+    vbLayout.push(3); offsets.push_back((void*)offsetof(Vertex, Normal));
+    vbLayout.push(2); offsets.push_back((void*)offsetof(Vertex, TexCoords));
     //vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Tangent));
     //vbLayout.push<float>(3); offsets.push_back((void*)offsetof(Vertex, Bitangent));
     //vbLayout.push<unsigned int>(4); offsets.push_back((void*)offsetof(Vertex, m_BoneIDs));
