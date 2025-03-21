@@ -158,9 +158,9 @@ int main()
    
     VertexBufferLayout vLayout;
 
-    vLayout.push<float>(3);
-    vLayout.push<float>(3);
-    vLayout.push<float>(2);
+    vLayout.push(3);
+    vLayout.push(3);
+    vLayout.push(2);
 
     cube_vao.addBuffer(vb, vLayout);
     light_vao.addBuffer(vb, vLayout);
