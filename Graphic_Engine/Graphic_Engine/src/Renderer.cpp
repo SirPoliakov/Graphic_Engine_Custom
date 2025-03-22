@@ -5,6 +5,7 @@
 void Renderer::draw(const Shader& shader, Model& _model) const
 {
     shader.use();
+    //GLCall(glDisable(GL_DEPTH_TEST));
     _model.draw(shader);
 }
 

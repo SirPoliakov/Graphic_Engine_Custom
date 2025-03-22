@@ -51,6 +51,15 @@
     <None Include="Ressource\Shaders\Model_Load.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Ressource\Shaders\depth_test.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\depth_test.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\SingleColor.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IndexBuffer.h">

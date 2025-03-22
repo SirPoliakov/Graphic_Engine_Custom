@@ -7,6 +7,7 @@
 VertexArray::VertexArray()
 {
 	GLCall(glGenVertexArrays(1, &renderer_ID));
+	GLCall(glBindVertexArray(renderer_ID));
 }
 
 VertexArray::~VertexArray()
@@ -22,13 +23,10 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& vb
 
 	for (unsigned int i = 0; i < elements.size(); i++)
 	{
-		if (i != 5)
-		{
-			const auto& element = elements[i];
-			GLCall(glEnableVertexAttribArray(i));
-			GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, _size, offsets[i]));
-		}
-		offset = (i + 1) * elements[0].count;
+		const auto& element = elements[i];
+		GLCall(glEnableVertexAttribArray(i));
+		//std::cout << "glVertexAttribPointer( " << i << " , " << element.count << " , " << element.type << " , " << element.normalized << " , " << _size << " , " << offsets[i] << " )" << std::endl;
+		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, _size, offsets[i]));
 	}
 }
 

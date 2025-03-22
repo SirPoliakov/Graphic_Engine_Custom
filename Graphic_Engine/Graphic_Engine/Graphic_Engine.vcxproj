@@ -31,10 +31,13 @@
     <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Ressource\Shaders\depth_test.frag" />
+    <None Include="Ressource\Shaders\depth_test.vert" />
     <None Include="Ressource\Shaders\light.frag" />
     <None Include="Ressource\Shaders\light.vert" />
     <None Include="Ressource\Shaders\Model_Load.frag" />
     <None Include="Ressource\Shaders\Model_Load.vert" />
+    <None Include="Ressource\Shaders\SingleColor.frag" />
     <None Include="Ressource\Shaders\Triangle.frag" />
     <None Include="Ressource\Shaders\Triangle.vert" />
   </ItemGroup>
