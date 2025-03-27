@@ -64,8 +64,6 @@ int main()
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     GLCall(glEnable(GL_DEPTH_TEST));
-    GLCall(glEnable(GL_BLEND));
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     // SHADERS
     Shader myShader("Ressource/Shaders/blending.vert", "Ressource/Shaders/blending.frag");
@@ -106,9 +104,9 @@ int main()
     // TEXTURES 
     unsigned int cubeTexture = loadTexture("Ressource/Textures/marble.jpg");
     unsigned int floorTexture = loadTexture("Ressource/Textures/metal.png");
-    unsigned int windowTexture = loadTexture("Ressource/Textures/window.png");
+    unsigned int grassTexture = loadTexture("Ressource/Textures/grass.png");
 
-    vector<glm::vec3> windows
+    vector<glm::vec3> grasses
     {
         glm::vec3(-1.5f, 0.0f, -0.48f),
         glm::vec3(1.5f, 0.0f, 0.51f),
@@ -117,9 +115,7 @@ int main()
         glm::vec3(-0.3f, 0.0f, -2.3f),
         glm::vec3(0.5f, 0.0f, -0.6f)
     };
-    unsigned int windowsSize = windows.size();
-
-   
+    unsigned int windowsSize = grasses.size();
 
     myShader.use();
     myShader.setInt("texture1", 0);
@@ -177,19 +173,12 @@ int main()
 
         //Transparent
         transparentVAO.bind();
-        GLCall(glBindTexture(GL_TEXTURE_2D, windowTexture)); 
-        
-        std::map<float, glm::vec3> sortedWindows;
-        for(int i = 0 ; i < windowsSize ; i++)
-        {
-            float distance = glm::length(myCam.Position - windows[i]);
-            sortedWindows[distance] = windows[i];
-        }
+        GLCall(glBindTexture(GL_TEXTURE_2D, grassTexture)); 
        
-        for (std::map<float,glm::vec3>::reverse_iterator ite = sortedWindows.rbegin(); ite != sortedWindows.rend(); ++ite)
+        for (unsigned int i = 0; i < windowsSize ; i++)
         {
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, ite->second);
+            model = glm::translate(model, grasses[i]);
             //if((i/2)*2 == i) model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             myShader.setMat4("model", model);
             GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
