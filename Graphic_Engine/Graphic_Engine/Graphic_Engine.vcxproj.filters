@@ -60,6 +60,12 @@
     <None Include="Ressource\Shaders\SingleColor.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Ressource\Shaders\blending.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\blending.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IndexBuffer.h">

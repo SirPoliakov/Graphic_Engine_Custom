@@ -31,6 +31,8 @@
     <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Ressource\Shaders\blending.frag" />
+    <None Include="Ressource\Shaders\blending.vert" />
     <None Include="Ressource\Shaders\depth_test.frag" />
     <None Include="Ressource\Shaders\depth_test.vert" />
     <None Include="Ressource\Shaders\light.frag" />

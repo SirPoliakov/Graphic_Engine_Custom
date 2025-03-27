@@ -5,6 +5,7 @@
 //#include <glm/gtc/type_ptr.hpp>
 #include "CameraManager.h"
 #include "Shapes.h"
+#include <map>
 
 
 const unsigned int SCR_WIDTH = 1600;
@@ -62,20 +63,17 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    stbi_set_flip_vertically_on_load(true);
-
     GLCall(glEnable(GL_DEPTH_TEST));
-    GLCall(glDepthFunc(GL_LESS));
-    GLCall(glEnable(GL_STENCIL_TEST));
-    GLCall(glStencilFunc(GL_NOTEQUAL, 1, 0xFF));
-    GLCall(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     // SHADERS
-    Shader myShader("Ressource/Shaders/depth_test.vert", "Ressource/Shaders/depth_test.frag");
-    Shader colorShader("Ressource/Shaders/depth_test.vert", "Ressource/Shaders/SingleColor.frag");
+    Shader myShader("Ressource/Shaders/blending.vert", "Ressource/Shaders/blending.frag");
+    //Shader colorShader("Ressource/Shaders/depth_test.vert", "Ressource/Shaders/SingleColor.frag");
 
     unsigned int cubeSize = sizeof(cubeVertices);
     unsigned int planeSize = sizeof(planeVertices);
+    unsigned int transparentSize = sizeof(transparentVertices);
    
     //CUBE VERTEX DATA
     VertexArray cubeVAO;
@@ -86,18 +84,42 @@ int main()
     cubeVAO.addBuffer(cubeVBO, vbLCube, 5*sizeof(float), offsetsCube);
     cubeVAO.unbind();
 
-    //CUBE VERTEX DATA
+    //PLANE VERTEX DATA
 
     VertexArray planeVAO;
-    VertexBuffer planeVBO(cubeVertices, planeSize);
+    VertexBuffer planeVBO(planeVertices, planeSize);
     VertexBufferLayout vbLPlane; vector<void*> offsetsPlane;
     vbLPlane.push(3); offsetsPlane.push_back((void*)0);
     vbLPlane.push(2); offsetsPlane.push_back((void*)(3 * sizeof(float)));
     cubeVAO.addBuffer(planeVBO, vbLPlane, 5 * sizeof(float), offsetsPlane);
+    planeVAO.unbind();
+
+    //TRANSPARENT VERTEX DATA
+    VertexArray transparentVAO;
+    VertexBuffer transparentVBO(transparentVertices, transparentSize);
+    VertexBufferLayout vbLTransparent; vector<void*> offsetsTransparent;
+    vbLTransparent.push(3); offsetsTransparent.push_back((void*)0);
+    vbLTransparent.push(2); offsetsTransparent.push_back((void*)(3 * sizeof(float)));
+    transparentVAO.addBuffer(transparentVBO, vbLTransparent, 5 * sizeof(float), offsetsTransparent);
+
 
     // TEXTURES 
     unsigned int cubeTexture = loadTexture("Ressource/Textures/marble.jpg");
     unsigned int floorTexture = loadTexture("Ressource/Textures/metal.png");
+    unsigned int windowTexture = loadTexture("Ressource/Textures/window.png");
+
+    vector<glm::vec3> windows
+    {
+        glm::vec3(-1.5f, 0.0f, -0.48f),
+        glm::vec3(1.5f, 0.0f, 0.51f),
+        glm::vec3(0.0f, 0.0f, 0.7f),
+        glm::vec3(0.0f, 0.0f, 0.7f),
+        glm::vec3(-0.3f, 0.0f, -2.3f),
+        glm::vec3(0.5f, 0.0f, -0.6f)
+    };
+    unsigned int windowsSize = windows.size();
+
+   
 
     myShader.use();
     myShader.setInt("texture1", 0);
@@ -115,7 +137,7 @@ int main()
 
         //Clear
         GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 
         myShader.use();
@@ -127,30 +149,19 @@ int main()
         myShader.setMat4("projection", projection);
         myShader.setMat4("view", view);
 
-        //Floor
-        GLCall(glStencilMask(0x00));
+        ////Floor
         planeVAO.bind();
         GLCall(glBindTexture(GL_TEXTURE_2D, floorTexture));
         glm::mat4 model = glm::mat4(1.0);
-        model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(5.0f, 1.0f, 5.0f));
-        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         
         myShader.setMat4("model", model);
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
         planeVAO.unbind();
 
-        // render Cube
-
-        GLCall(glStencilFunc(GL_ALWAYS, 1, 0xFF));
-        GLCall(glStencilMask(0xFF));
-
-        cubeVAO.bind();
-
-        GLCall(glActiveTexture(GL_TEXTURE0));
-        GLCall(glBindTexture(GL_TEXTURE_2D, cubeTexture));
-
         //Cubes
+        cubeVAO.bind();
+        GLCall(glBindTexture(GL_TEXTURE_2D, cubeTexture));
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f)); // translate it down so it's at the center of the scene
         myShader.setMat4("model", model);
@@ -162,33 +173,27 @@ int main()
         myShader.setMat4("model", model);
 
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
-
-        //Cube Outlines
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        glStencilMask(0x00);
-        glDisable(GL_DEPTH_TEST);
-        colorShader.use();
-
-        colorShader.setMat4("projection", projection);
-        colorShader.setMat4("view", view);
-
-        float scale = 1.05f;
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-        colorShader.setMat4("model", model);
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
-
-        model = glm::mat4(1.0f);        
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-        colorShader.setMat4("model", model);
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
         cubeVAO.unbind();
 
-        glStencilMask(0xFF);
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glEnable(GL_DEPTH_TEST);
+        //Transparent
+        transparentVAO.bind();
+        GLCall(glBindTexture(GL_TEXTURE_2D, windowTexture)); 
+        
+        std::map<float, glm::vec3> sortedWindows;
+        for(int i = 0 ; i < windowsSize ; i++)
+        {
+            float distance = glm::length(myCam.Position - windows[i]);
+            sortedWindows[distance] = windows[i];
+        }
+       
+        for (std::map<float,glm::vec3>::reverse_iterator ite = sortedWindows.rbegin(); ite != sortedWindows.rend(); ++ite)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, ite->second);
+            //if((i/2)*2 == i) model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            myShader.setMat4("model", model);
+            GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+        }
 
         /* Swap buffer and poll for and process events */
         GLCall(glfwSwapBuffers(window));
