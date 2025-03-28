@@ -156,6 +156,9 @@ int main()
         planeVAO.unbind();
 
         //Cubes
+        GLCall(glEnable(GL_CULL_FACE));
+        GLCall(glCullFace(GL_BACK));
+        //GLCall(glFrontFace(GL_CW));
         cubeVAO.bind();
         GLCall(glBindTexture(GL_TEXTURE_2D, cubeTexture));
         model = glm::mat4(1.0f);
@@ -172,6 +175,7 @@ int main()
         cubeVAO.unbind();
 
         //Transparent
+        GLCall(glDisable(GL_CULL_FACE));
         transparentVAO.bind();
         GLCall(glBindTexture(GL_TEXTURE_2D, grassTexture)); 
        
