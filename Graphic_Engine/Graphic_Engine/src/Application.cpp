@@ -5,6 +5,7 @@
 //#include <glm/gtc/type_ptr.hpp>
 #include "CameraManager.h"
 #include "Shapes.h"
+#include "FrameBuffer.h"
 #include <map>
 
 
@@ -24,6 +25,7 @@ bool firstMouse = true;
 
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
@@ -40,12 +42,12 @@ int main()
     if (!glfwInit())
         return -1;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL);
    if (!window)
     {
         glfwTerminate();
@@ -54,7 +56,10 @@ int main()
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (GLEW_OK != glewInit())
     {
@@ -66,12 +71,13 @@ int main()
     GLCall(glEnable(GL_DEPTH_TEST));
 
     // SHADERS
-    Shader myShader("Ressource/Shaders/blending.vert", "Ressource/Shaders/blending.frag");
-    //Shader colorShader("Ressource/Shaders/depth_test.vert", "Ressource/Shaders/SingleColor.frag");
+    Shader myShader("Ressource/Shaders/framebuffer.vert", "Ressource/Shaders/framebuffer.frag");
+    Shader screenShader("Ressource/Shaders/fb_screen.vert", "Ressource/Shaders/fb_screen.frag");
 
     unsigned int cubeSize = sizeof(cubeVertices);
     unsigned int planeSize = sizeof(planeVertices);
-    unsigned int transparentSize = sizeof(transparentVertices);
+    unsigned int quadSize = sizeof(quadVertices);
+    unsigned int smallQuadSize = sizeof(smallQuadVertices);
    
     //CUBE VERTEX DATA
     VertexArray cubeVAO;
@@ -89,37 +95,32 @@ int main()
     VertexBufferLayout vbLPlane; vector<void*> offsetsPlane;
     vbLPlane.push(3); offsetsPlane.push_back((void*)0);
     vbLPlane.push(2); offsetsPlane.push_back((void*)(3 * sizeof(float)));
-    cubeVAO.addBuffer(planeVBO, vbLPlane, 5 * sizeof(float), offsetsPlane);
+    planeVAO.addBuffer(planeVBO, vbLPlane, 5 * sizeof(float), offsetsPlane);
     planeVAO.unbind();
 
-    //TRANSPARENT VERTEX DATA
-    VertexArray transparentVAO;
-    VertexBuffer transparentVBO(transparentVertices, transparentSize);
-    VertexBufferLayout vbLTransparent; vector<void*> offsetsTransparent;
-    vbLTransparent.push(3); offsetsTransparent.push_back((void*)0);
-    vbLTransparent.push(2); offsetsTransparent.push_back((void*)(3 * sizeof(float)));
-    transparentVAO.addBuffer(transparentVBO, vbLTransparent, 5 * sizeof(float), offsetsTransparent);
-
+    //Screen quad VAO
+    VertexArray smallQuadVAO;
+    VertexBuffer smallQuadVBO(smallQuadVertices, smallQuadSize);
+    VertexBufferLayout vbLSmallQuad; vector<void*> offsetsSmallQuad;
+    vbLSmallQuad.push(2); offsetsSmallQuad.push_back((void*)0);
+    vbLSmallQuad.push(2); offsetsSmallQuad.push_back((void*)(2 * sizeof(float)));
+    smallQuadVAO.addBuffer(smallQuadVBO, vbLSmallQuad, 4 * sizeof(float), offsetsSmallQuad);
+    smallQuadVAO.unbind();
 
     // TEXTURES 
-    unsigned int cubeTexture = loadTexture("Ressource/Textures/marble.jpg");
+    unsigned int cubeTexture = loadTexture("Ressource/Textures/container.jpg");
     unsigned int floorTexture = loadTexture("Ressource/Textures/metal.png");
-    unsigned int grassTexture = loadTexture("Ressource/Textures/grass.png");
-
-    vector<glm::vec3> grasses
-    {
-        glm::vec3(-1.5f, 0.0f, -0.48f),
-        glm::vec3(1.5f, 0.0f, 0.51f),
-        glm::vec3(0.0f, 0.0f, 0.7f),
-        glm::vec3(0.0f, 0.0f, 0.7f),
-        glm::vec3(-0.3f, 0.0f, -2.3f),
-        glm::vec3(0.5f, 0.0f, -0.6f)
-    };
-    unsigned int windowsSize = grasses.size();
 
     myShader.use();
     myShader.setInt("texture1", 0);
+
+    screenShader.use();
+    screenShader.setInt("screenTexture", 0);
     
+    // FRAME BUFFER SETUP
+    FrameBuffer FBO;
+
+
     while (!glfwWindowShouldClose(window))
     {
 
@@ -131,6 +132,13 @@ int main()
 
         /* Render here */
 
+        // ------------------------------------------------------------------------------------
+       //Second render pass
+       // ------------------------------------------------------------------------------------
+
+        FBO.bind();
+        GLCall(glEnable(GL_DEPTH_TEST));
+
         //Clear
         GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -139,26 +147,26 @@ int main()
         myShader.use();
         
         //Camera
+        myCam.Yaw += 180.0f; // rotate the camera's yaw 180 degrees around
+        myCam.ProcessMouseMovement(0, 0);
         glm::mat4 view = myCam.GetViewMatrix();
+        myCam.Yaw -= 180.0f; // reset it back to its original orientation
+        myCam.ProcessMouseMovement(0, 0);
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         myShader.setMat4("projection", projection);
         myShader.setMat4("view", view);
 
-        ////Floor
+        //Floor
         planeVAO.bind();
         GLCall(glBindTexture(GL_TEXTURE_2D, floorTexture));
         glm::mat4 model = glm::mat4(1.0);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-        
         myShader.setMat4("model", model);
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
         planeVAO.unbind();
 
         //Cubes
-        GLCall(glEnable(GL_CULL_FACE));
-        GLCall(glCullFace(GL_BACK));
-        //GLCall(glFrontFace(GL_CW));
         cubeVAO.bind();
         GLCall(glBindTexture(GL_TEXTURE_2D, cubeTexture));
         model = glm::mat4(1.0f);
@@ -174,24 +182,68 @@ int main()
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
         cubeVAO.unbind();
 
-        //Transparent
-        GLCall(glDisable(GL_CULL_FACE));
-        transparentVAO.bind();
-        GLCall(glBindTexture(GL_TEXTURE_2D, grassTexture)); 
+       // ------------------------------------------------------------------------------------
+       //Second render pass
+       // ------------------------------------------------------------------------------------
+
+        FBO.unbind();
        
-        for (unsigned int i = 0; i < windowsSize ; i++)
-        {
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, grasses[i]);
-            //if((i/2)*2 == i) model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            myShader.setMat4("model", model);
-            GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
-        }
+        GLCall(glClearColor(0.1f, 0.1f, 0.1f, 0.1f));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+        
+        model = glm::mat4(1.0f);
+        view = myCam.GetViewMatrix();
+        myShader.setMat4("view", view);
+
+        //Floor
+        planeVAO.bind();
+        GLCall(glBindTexture(GL_TEXTURE_2D, floorTexture));
+        model = glm::mat4(1.0);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        myShader.setMat4("model", model);
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+        planeVAO.unbind();
+
+        //Cubes
+        cubeVAO.bind();
+        GLCall(glBindTexture(GL_TEXTURE_2D, cubeTexture));
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f)); // translate it down so it's at the center of the scene
+        myShader.setMat4("model", model);
+
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        myShader.setMat4("model", model);
+
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
+        cubeVAO.unbind();
+        
+        // ------------------------------------------------------------------------------------
+        // Now draw the mirror quad with screen texture
+        // ------------------------------------------------------------------------------------
+
+         GLCall(glDisable(GL_DEPTH));
+        screenShader.use();
+        smallQuadVAO.bind();
+        FBO.bindTexture();
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+
 
         /* Swap buffer and poll for and process events */
         GLCall(glfwSwapBuffers(window));
         GLCall(glfwPollEvents());
     }
+
+    cubeVAO.~VertexArray();
+    planeVAO.~VertexArray();
+    planeVAO.~VertexArray();
+    cubeVBO.~VertexBuffer();
+    planeVBO.~VertexBuffer();
+    smallQuadVBO.~VertexBuffer();
+    FBO.~FrameBuffer();
+    
 
     GLCall(glfwTerminate());
     return 0;
@@ -249,4 +301,11 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     lastY = ypos;
 
     myCam.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    // make sure the viewport matches the new window dimensions; note that width and 
+    // height will be significantly larger than specified on retina displays.
+    GLCall(glViewport(0, 0, width, height));
 }

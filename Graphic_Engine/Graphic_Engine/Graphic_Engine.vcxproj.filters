@@ -31,6 +31,9 @@
     <ClCompile Include="src\GLCalls.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ressource\Shaders\Triangle.frag">
@@ -66,6 +69,18 @@
     <None Include="Ressource\Shaders\blending.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Ressource\Shaders\framebuffer.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\framebuffer.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\fb_screen.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Ressource\Shaders\fb_screen.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IndexBuffer.h">
@@ -99,6 +114,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\GLCalls.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FrameBuffer.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
