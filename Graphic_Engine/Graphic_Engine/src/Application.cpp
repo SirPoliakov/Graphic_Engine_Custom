@@ -133,7 +133,7 @@ int main()
         /* Render here */
 
         // ------------------------------------------------------------------------------------
-       //Second render pass
+       //1rst render pass
        // ------------------------------------------------------------------------------------
 
         FBO.bind();
@@ -224,7 +224,7 @@ int main()
         // Now draw the mirror quad with screen texture
         // ------------------------------------------------------------------------------------
 
-         GLCall(glDisable(GL_DEPTH));
+        GLCall(glDisable(GL_DEPTH));
         screenShader.use();
         smallQuadVAO.bind();
         FBO.bindTexture();

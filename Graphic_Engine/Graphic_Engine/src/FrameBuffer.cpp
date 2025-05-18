@@ -6,7 +6,8 @@
 
 
 FrameBuffer::FrameBuffer(GLsizei _w, GLsizei _h)		
-: SCR_WIDTH(_w), SCR_HEIGHT(_h){
+: SCR_WIDTH(_w), SCR_HEIGHT(_h)
+{
 	GLCall(glGenFramebuffers(1, &frameBuffer_ID));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer_ID));
 
